@@ -1,244 +1,82 @@
-<h1 align="center">
-<img width="40" valign="bottom" src="https://angular.io/assets/images/logos/angular/angular.svg">
-Angular Pro: Final App Seed
-</h1>
-<h4 align="center">Seed app for fitness manager application using Angular v4+ and AngularFire2.</h4>
+<a href="https://ultimateangular.com" target="_blank"><img src="https://toddmotto.com/img/ua.png"></a>
 
----
+# Angular Fundamentals Seed
 
-<a href="https://ultimateangular.com" target="_blank"><img src="https://ultimateangular.com/assets/img/banner.jpg"></a>
+> This is the seed project for the [Angular Fundamentals](https://ultimateangular.com/courses/#angular-2) course by [Todd Motto](https://twitter.com/toddmotto).
 
----
+## Project Setup and Tooling
 
-> This repo serves as the seed project for the Ultimate Angular Pro course as well as the final solution in a separate branch, come and [learn advanced Angular](https://ultimateangular.com/courses/) architecture!
+### Tools
 
-[Setup and install](#setup-and-install) |
-[Tasks](#tasks) |
-[Snippets](#snippets) |
-[Firebase Config](#firebase-config) |
-[Resources](#resources)
+This course is recorded with the following tools, you can optionally follow along using the same, or your favourite text editor/IDE and browser.
 
-## Setup and install
+*Text editor*: Visual Studio Code, you can [download it here](http://code.visualstudio.com) for both Mac, Windows and Linux.
+*Browser*: Google Chrome, you can [download it here](https://www.google.com/chrome)
 
-Fork this repo from inside GitHub so you can commit directly to your account, or simply download the `.zip` bundle with the contents inside.
+### Prerequisites
 
-#### Dependency installation
+Please make sure that you have the following installed:
 
-During the time building this project, you'll need development dependencies of which run on Node.js, follow the steps below for setting everything up (if you have some of these already, skip to the next step where appropriate):
+* Install the _latest version_ of [Node.js](http://nodejs.org) (Mac or Windows)
+  * Mac users can optionally `brew install node` if they have [brew](http://brew.sh) installed
 
-1. Download and install [Node.js here](https://nodejs.org/en/download/) for Windows or for Mac.
-2. Install Firebase CLI on the command-line with `npm install -g firebase-tools`
+* Node Sass, you _may_ need it if you haven't already got it installed:
 
-That's about it for tooling you'll need to run the project, let's move onto the project install.
-
-#### Project installation and server
-
-Now you've pulled down the repo and have everything setup, using the terminal you'll need to `cd` into the directory that you cloned the repo into and run some quick tasks:
-
+```bash
+npm install -g node-sass
 ```
-cd <angular-pro-app>
+
+### Project Install
+
+To grab the seed project, either Fork this repo or [click here to download](https://github.com/UltimateAngular/angular-fundamentals-seed/archive/master.zip) the `.zip` folder and extract the files wherever you like on your machine.
+
+#### Step 1: Package Manager
+
+To install the project dependencies, you will need to install `yarn`. To install `yarn`, run the following in your terminal:
+
+```bash
+npm install -g yarn
+```
+
+Mac users can alternatively use `brew` to install `yarn`.
+
+```bash
+brew update
+brew install yarn
+```
+
+If you experience any issues when installing/using `yarn` you can checkout the installation instructions [here](https://yarnpkg.com/en/docs/install).
+
+##### Step 2: Project Dependencies
+
+Now that we have a package manager, we can install the project dependencies. You can do this by running:
+
+```bash
 yarn install
-# OR
-npm install
 ```
 
-This will then setup all the development and production dependencies we need.
+This will install our dependencies for running our Angular application.
 
-Now simply run this to boot up the server:
+#### Step 3: Running the project
 
-```
-yarn start
-# OR
-npm start
-```
+During development, the project is built using `webpack-dev-server`. This provides a local development server as well as having webpack recompile our app when a file changes. The project will also automatically refresh the page whenever we make changes.
 
-## Tasks
-
-A quick reminder of all tasks available:
-
-#### Development server
+To start the project in development, run:
 
 ```
 yarn start
-# OR
-npm start
 ```
 
-#### Production build (compile AoT)
+This will output some information about the project (such as the TypeScript version and build progress). Once you see "build completed", you are ready to code!
 
-```
-yarn build:production
-# OR
-npm run build:production
-```
+Open your browser to [localhost:4000](http://localhost:4000) to start running the code.
 
-#### Deploying to Firebase
+### Project Tooling
 
-You'll need to ensure you're logged into Firebase first (if you are prompted, otherwise skip to next step):
+The project uses `webpack` to build and compile all of our assets. This will do the following for us: 
 
-```
-firebase login
-```
-
-To deploy (after running build task):
-
-```
-firebase deploy
-```
-
-## Snippets
-
-Here are some [VSCode](https://code.visualstudio.com) snippets I'm using whilst recording this application, these help speed up boilerplate creation for things such as components, modules and services.
-
-> Here's how to [install the snippets](https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets) in VSCode. Add them to `typescript.json` when prompted for which language the snippets are for.
-
-```json
-{
-  "@Component": {
-    "prefix": "@Component",
-    "description": "Creates a component definition",
-    "body": [
-      "import { Component } from '@angular/core';",
-      "",
-      "@Component({",
-      "\tselector: '${1:selector-name}',",
-      "\tstyleUrls: ['${1:selector-name}.component.scss'],",
-      "\ttemplate: `",
-      "\t\t<div>",
-      "\t\t\t",
-      "\t\t</div>",
-      "\t`",
-      "})",
-      "export class ${3:Name}Component {",
-      "\tconstructor() {}",
-      "}"
-    ]
-  },
-  "@Injectable": {
-    "prefix": "@Injectable",
-    "description": "Creates an @Injectable service",
-    "body": [
-      "import { Injectable } from '@angular/core';",
-      "",
-      "@Injectable()",
-      "export class ${1:Name}Service {",
-      "\tconstructor() {}",
-      "}"
-    ]
-  },
-  "@NgModule": {
-    "prefix": "@NgModule",
-    "description": "Creates an @NgModule",
-    "body": [
-      "import { NgModule } from '@angular/core';",
-      "",
-      "@NgModule({",
-      "\timports: [],",
-      "\tdeclarations: [],",
-      "\tproviders: []",
-      "})",
-      "export class ${1:Name}Module {}"
-    ]
-  },
-  "@Pipe": {
-    "prefix": "@Pipe",
-    "description": "Creates an @Pipe",
-    "body": [
-      "import { Pipe, PipeTransform } from '@angular/core';",
-      "",
-      "@Pipe({",
-      "\tname: '${1:selector-name}'",
-      "})",
-      "export class ${2:Name}Pipe implements PipeTransform {",
-      "\ttransform(value: any) {",
-      "\t\t$0",
-      "\t}",
-      "}"
-    ]
-  }
-}
-```
-
-## Firebase Config
-
-#### database.rules.json
-
-```
-{
-  "rules": {
-    "users": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    },
-    "schedule": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid",
-        ".indexOn": [
-          "timestamp"
-        ]
-      }
-    },
-    "meals": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    },
-    "workouts": {
-      "$uid": {
-        ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
-      }
-    }
-  }
-}
-```
-
-#### firebase.json
-
-```
-{
-  "database": {
-    "rules": "database.rules.json"
-  },
-  "hosting": {
-    "public": "",
-    "ignore": [
-      "firebase.json",
-      ".firebaserc",
-      ".vscode",
-      ".git",
-      ".gitignore",
-      ".editorconfig",
-      "src/**/.*",
-      "database.rules.json",
-      "package.json",
-      "README.md",
-      "tsconfig.json",
-      "webpack.config.js",
-      "yarn.lock",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
-```
-
-## Resources
-
-There are several resources used inside this project, of which you can read further about to dive deeper or understand in more detail what they are:
-
-* [Angular](https://angular.io)
-* [Firebase Docs](https://firebase.google.com/docs/)
-* [Firebase CLI](https://firebase.google.com/docs/cli/)
-* [AngularFire2 Repo/Docs](https://github.com/angular/angularfire2)
-* [npm](https://www.npmjs.com/)
-* [Webpack](https://webpack.js.org/)
+- Compile all our TypeScript code into JavaScript (starting from `main.ts` and branching outwards from imported files)
+- Bundle all our JavaScript into one file to use
+- Allow us to use SASS for our component's CSS files
+- Provide the polyfills needed to run our app in all modern browsers
+- Mock a JSON backend using [json-server](https://github.com/typicode/json-server)

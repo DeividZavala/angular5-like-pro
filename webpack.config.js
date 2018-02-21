@@ -1,119 +1,114 @@
-const path = require('path');
-const webpack = require('webpack');
-const typescript = require('typescript');
-const { AotPlugin } = require('@ngtools/webpack');
+var path = require('path');
+var fs = require('fs');
 
-const rules = [
-  { test: /\.html$/, loader: 'html-loader' },
-  { test: /\.scss$/, loaders: ['raw-loader', 'sass-loader'] },
-  { test: /\.(jpe?g|png|gif|svg)$/i, loader: 'file-loader' }
-];
+var webpack = require('webpack');
+var server = require('webpack-dev-server');
+var ts = require('awesome-typescript-loader');
+var chalk = require('chalk');
+var ProgressBarPlugin = require('progress-bar-webpack-plugin');
+var jsonServer = require('json-server');
 
-const plugins = [
-  new webpack.DefinePlugin({
-    'process.env': {
-      'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    }
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    minChunks: (module) => module.context && /node_modules/.test(module.context)
-  })
-];
-
-if (process.env.NODE_ENV === 'production') {
-  rules.push({
-    test: /\.ts$/, loaders: ['@ngtools/webpack']
-  });
-  plugins.push(
-    new AotPlugin({
-      tsConfigPath: './tsconfig.json',
-      entryModule: 'src/app/app.module#AppModule'
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      beautify: false,
-      mangle: {
-        screw_ie8: true
-      },
-      compress: {
-        unused: true,
-        dead_code: true,
-        drop_debugger: true,
-        conditionals: true,
-        evaluate: true,
-        drop_console: true,
-        sequences: true,
-        booleans: true,
-        screw_ie8: true,
-        warnings: false
-      },
-      comments: false
-    })
-  );
-} else {
-  rules.push({
-    test: /\.ts$/,
-    loaders: [
-      'awesome-typescript-loader', 'angular-router-loader', 'angular2-template-loader'
-    ]
-  });
-  plugins.push(
-    new webpack.NamedModulesPlugin(),
-    new webpack.ContextReplacementPlugin(/angular(\\|\/)core(\\|\/)@angular/, path.resolve(__dirname, './notfound'))
-  );
-}
+var cwd = process.cwd();
 
 module.exports = {
   cache: true,
-  context: __dirname,
+  context: cwd,
+  performance: {
+    hints: false
+  },
   devServer: {
-    contentBase: __dirname,
+    contentBase: cwd,
+    compress: true,
+    inline: true,
+    hot: true,
+    port: 4000,
+    publicPath: '/build/',
+    quiet: true,
     historyApiFallback: true,
+    setup: function (app) {
+      app.use('/api', jsonServer.router('db.json'));
+    },
     stats: {
       chunks: false,
-      chunkModules: false,
-      chunkOrigins: false,
-      errors: true,
-      errorDetails: false,
-      hash: false,
-      timings: false,
-      modules: false,
-      warnings: false
-    },
-    publicPath: '/build/',
-    port: 3000
+      chunkModules: false
+    }
   },
   devtool: 'sourcemap',
   entry: {
-    app: ['zone.js/dist/zone', './src/main.ts']
-  },
-  output: {
-    filename: '[name].js',
-    chunkFilename: '[name]-chunk.js',
-    publicPath: '/build/',
-    path: path.resolve(__dirname, 'build')
-  },
-  node: {
-    console: false,
-    global: true,
-    process: true,
-    Buffer: false,
-    setImmediate: false
-  },
-  module: {
-    rules
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
-    modules: [
-      'src',
-      'node_modules'
+    app: [
+      'reflect-metadata',
+      'ts-helpers',
+      'zone.js',
+      'main'
     ]
   },
-  plugins
+  output: {
+    chunkFilename: '[name].chunk.js',
+    filename: '[name].js',
+    path: path.resolve(cwd, 'build'),
+    publicPath: '/build/',
+    sourceMapFilename: '[name].map'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'awesome-typescript-loader'
+          },
+          {
+            loader: 'angular2-template-loader'
+          }
+        ],
+        include: [
+          path.resolve(cwd, 'app')
+        ]
+      },
+      {
+        test: /\.html/,
+        loader: 'raw-loader'
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'raw-loader'
+          },
+          {
+            loader: 'resolve-url-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  node: {
+    fs: 'empty',
+    global: true,
+    crypto: 'empty'
+  },
+  plugins: [
+    new webpack.DllReferencePlugin({
+      context: './',
+      manifest: require(path.resolve(cwd, 'vendor/vendor-manifest.json'))
+    }),
+    new webpack.NamedModulesPlugin(),
+    new ProgressBarPlugin({
+      format: chalk.magenta.bold('build') + ' [' + chalk.green(':bar')+ '] ' + chalk.green.bold(':percent') + ' ' + chalk.yellow.bold(':elapsed seconds') + ' ' + chalk.white(':msg'),
+      clear: false
+    }),
+    new ts.TsConfigPathsPlugin(),
+    new ts.CheckerPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  resolve: {
+    extensions: ['.ts', '.js'],
+    modules: ['node_modules', cwd]
+  }
 };
