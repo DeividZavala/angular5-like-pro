@@ -7,7 +7,7 @@ import { User } from './auth-form.interface';
   template: `
     <div>
       <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
-        <h3>Mi formulario</h3>
+        <ng-content></ng-content>
         <label>
           Email address
           <input type="email" name="email" ngModel>

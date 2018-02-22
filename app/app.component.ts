@@ -7,8 +7,13 @@ import { User } from './auth-form/auth-form.interface';
   template: `
   
   <div>
-    <auth-form (submitted)="createUser($event)"></auth-form>
-    <auth-form (submitted)="loginUser($event)"></auth-form>
+    <auth-form 
+      (submitted)="createUser($event)">
+      <h3>Crear cuenta</h3>
+    </auth-form>
+    <auth-form (submitted)="loginUser($event)">
+      <h3>Login</h3>
+    </auth-form>
   </div>
   
   `
