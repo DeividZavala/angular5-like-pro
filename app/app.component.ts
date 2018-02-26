@@ -1,4 +1,7 @@
-import {AfterContentInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef} from '@angular/core';
+import {
+  AfterContentInit, Component, ComponentFactoryResolver, ComponentRef, ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 
 import {AuthFormComponent} from "./auth-form/auth-form.component";
 
@@ -9,12 +12,17 @@ import { User } from './auth-form/auth-form.interface';
   template: `
   
   <div>
+    <button (click)="destroyComponent()">
+      Destruir
+    </button>
     <div #entry></div>
   </div>
   
   `
 })
 export class AppComponent implements AfterContentInit{
+
+  component: ComponentRef<AuthFormComponent>;
 
   constructor(
     private resolver: ComponentFactoryResolver
@@ -24,7 +32,14 @@ export class AppComponent implements AfterContentInit{
 
   ngAfterContentInit(){
     const authFormFactory = this.resolver.resolveComponentFactory(AuthFormComponent);
-    const component = this.entry.createComponent(authFormFactory);
+    this.component = this.entry.createComponent(authFormFactory);
+    // Una vez que creamos el componente podemos cambiar sus atributos
+    this.component.instance.title = "Crear cuenta";
+    this.component.instance.submitted.subscribe(this.loginUser);
+  }
+
+  destroyComponent(){
+    this.component.destroy();
   }
 
   loginUser(user: User) {
