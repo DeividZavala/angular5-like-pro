@@ -10,6 +10,9 @@ import {AuthMessageComponent} from "./auth-message.component";
 
 @Component({
   selector: 'auth-form',
+  styles:[`
+    .email{border-color: #9f72e6}
+  `],
   template: `
     <div>
       <form (ngSubmit)="onSubmit(form.value)" #form="ngForm">
@@ -37,6 +40,7 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit{
 
   showMessage: boolean;
 
+  // Nos da acceso al elemento del dom, atributos y metodos
   @ViewChild('email') email: ElementRef;
 
   @ViewChildren(AuthMessageComponent) message: QueryList<AuthMessageComponent>;
@@ -46,6 +50,10 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit{
   @Output() submitted: EventEmitter<User> = new EventEmitter<User>();
 
   ngAfterViewInit(){
+
+    this.email.nativeElement.setAttribute("placeholder", "Ingresa tu correo");
+    this.email.nativeElement.classList.add('email');
+    this.email.nativeElement.focus();
 
     if(this.message){
       this.message.forEach((message) => message.days = 30);
