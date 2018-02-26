@@ -4,12 +4,14 @@ import { CommonModule } from '@angular/common';
 
 import { AuthFormComponent } from './auth-form.component';
 import { AuthRememberComponent } from './auth-remeber.component';
+import{ AuthMessageComponent } from "./auth-message.component";
 
 
 @NgModule({
   declarations: [
     AuthFormComponent,
-    AuthRememberComponent
+    AuthRememberComponent,
+    AuthMessageComponent
   ],
   imports: [
     CommonModule,
