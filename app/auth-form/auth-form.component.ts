@@ -1,6 +1,11 @@
+/*
+ * Para angular5 el modulo que se importa es Renderer2 en lugar de Renderer
+ * versión de este demo Angular 4.0.0
+ */
+
 import {
   Component, Output, ChangeDetectorRef, QueryList, ViewChild, ViewChildren, EventEmitter, ContentChildren,
-  AfterContentInit, AfterViewInit, ElementRef
+  AfterContentInit, AfterViewInit, ElementRef, Renderer
 } from '@angular/core';
 
 import { User } from './auth-form.interface';
@@ -36,7 +41,10 @@ import {AuthMessageComponent} from "./auth-message.component";
 })
 export class AuthFormComponent implements AfterContentInit, AfterViewInit{
 
-  constructor(private cd: ChangeDetectorRef){}
+  constructor(
+    private renderer: Renderer,
+    private cd: ChangeDetectorRef
+  ){}
 
   showMessage: boolean;
 
@@ -51,9 +59,20 @@ export class AuthFormComponent implements AfterContentInit, AfterViewInit{
 
   ngAfterViewInit(){
 
-    this.email.nativeElement.setAttribute("placeholder", "Ingresa tu correo");
-    this.email.nativeElement.classList.add('email');
-    this.email.nativeElement.focus();
+    /***
+     * Si queremos distruir nuestro código en distintas plataformas como la movil y web
+     * es necesario que usemos el metodo Renderer para usar la api nativa de angular, Ej.
+     ***/
+    // Solo web
+    //this.email.nativeElement.setAttribute("placeholder", "Ingresa tu correo");
+    //this.email.nativeElement.classList.add('email');
+    //this.email.nativeElement.focus();
+
+    // Multiples plataformas
+    this.renderer.setElementAttribute(this.email.nativeElement,'placeholder','Ingresa aqui tu email');
+    this.renderer.setElementClass(this.email.nativeElement, 'email',true);
+    this.renderer.invokeElementMethod(this.email.nativeElement,'focus');
+
 
     if(this.message){
       this.message.forEach((message) => message.days = 30);
