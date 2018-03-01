@@ -1,10 +1,11 @@
-import { Component,ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   template: `
     <div>
       <label>
+        Número de tarjeta de credito
         <input 
           name="credit-card" 
           type="text" 
