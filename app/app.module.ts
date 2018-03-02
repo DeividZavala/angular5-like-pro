@@ -3,14 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 
 import { AppComponent } from './app.component';
-import {CreditCardDirective} from "./credit-card/credit-card.directive";
-import {TooltipDirective} from "./tooltip/tooltip.directive";
+import {FileSizePipe} from "./filesize.pipe";
 
 @NgModule({
   declarations: [
     AppComponent,
-    CreditCardDirective,
-    TooltipDirective
+    FileSizePipe
   ],
   imports: [
     BrowserModule
