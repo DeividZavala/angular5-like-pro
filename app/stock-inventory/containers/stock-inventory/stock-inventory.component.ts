@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {FormControl, FormGroup, FormArray} from "@angular/forms";
+import {FormBuilder,FormControl, FormGroup, FormArray} from "@angular/forms";
 
 import {Product} from '../../models/products.interface';
 
@@ -43,6 +43,10 @@ import {Product} from '../../models/products.interface';
 })
 export class StockInventoryComponent{
 
+  constructor(
+    private fb: FormBuilder
+  ){}
+
   products: Product[] = [
     { 'id':1, 'name':"MacBook", 'price':2800},
     { 'id':2, 'name':"Xbox", 'price':450},
@@ -51,20 +55,20 @@ export class StockInventoryComponent{
     { 'id':5, 'name':"Call of duty WWII", 'price': 50}
   ];
 
-  form = new FormGroup({
-    store: new FormGroup({
-      branch: new FormControl(''),
-      code: new FormControl('')
+  form = this.fb.group({
+    store: this.fb.group({
+      branch: '',
+      code: ''
     }),
     selector: this.createStock({}),
-    stock: new FormArray([
+    stock: this.fb.array([
       this.createStock({product_id:1,quantity:30}),
       this.createStock({product_id:3,quantity:50})
     ])
   });
 
   createStock(stock){
-    return new FormGroup({
+    return this.fb.group({
       product_id: new FormControl(stock.product_id || ''),
       quantity:  new FormControl(stock.quantity || 10)
     })
