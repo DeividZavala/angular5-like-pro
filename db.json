@@ -9,5 +9,11 @@
     { "id":3, "name":"Control inalambrico", "price":55},
     { "id":4, "name":"PlayStation", "price":400},
     { "id":5, "name":"Call of duty WWII", "price": 50}
+  ],
+  "branches": [
+    {"id": "A123"},
+    {"id": "B123"},
+    {"id": "C123"},
+    {"id": "D123"}
   ]
 }
