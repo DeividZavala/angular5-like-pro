@@ -1,4 +1,7 @@
 .stock-counter {
+  &.focused {
+    box-shadow: 0 1px 1px rgba(0,0,0,.3);
+  }
   background: rgba(0, 0, 0, 0.05);
   border-radius: 3px;
   overflow: hidden;
