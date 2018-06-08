@@ -3,11 +3,10 @@ var fs = require('fs');
 
 var webpack = require('webpack');
 var server = require('webpack-dev-server');
-var ts = require('awesome-typescript-loader');
 var chalk = require('chalk');
 var ProgressBarPlugin = require('progress-bar-webpack-plugin');
 var jsonServer = require('json-server');
-
+var aot = require('@ultimate/aot-loader');
 var cwd = process.cwd();
 
 module.exports = {
@@ -53,17 +52,7 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: [
-          {
-            loader: 'awesome-typescript-loader'
-          },
-          {
-            loader: 'angular2-template-loader'
-          }
-        ],
-        include: [
-          path.resolve(cwd, 'app')
-        ]
+        loader: '@ultimate/aot-loader'
       },
       {
         test: /\.html/,
@@ -94,6 +83,9 @@ module.exports = {
     crypto: 'empty'
   },
   plugins: [
+    new aot.AotPlugin({
+      tsConfig: './tsconfig.json'
+    }),
     new webpack.DllReferencePlugin({
       context: './',
       manifest: require(path.resolve(cwd, 'vendor/vendor-manifest.json'))
@@ -103,8 +95,6 @@ module.exports = {
       format: chalk.magenta.bold('build') + ' [' + chalk.green(':bar')+ '] ' + chalk.green.bold(':percent') + ' ' + chalk.yellow.bold(':elapsed seconds') + ' ' + chalk.white(':msg'),
       clear: false
     }),
-    new ts.TsConfigPathsPlugin(),
-    new ts.CheckerPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   resolve: {

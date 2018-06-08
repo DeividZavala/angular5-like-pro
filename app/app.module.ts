@@ -1,31 +1,26 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {HttpModule} from "@angular/http";
-
-
-import { AppComponent } from './app.component';
-import {StockInventoryModule} from "./stock-inventory/stock-inventory.module";
-import {RouterModule, Routes} from "@angular/router";
+import { RouterModule, Routes } from '@angular/router';
+import { HttpModule } from '@angular/http';
 
 import { MailModule } from './mail/mail.module';
 
-export const ROUTER : Routes = [
-  {
-    path: '**',
-    redirectTo: 'folder/index'
-  }
+import { AppComponent } from './app.component';
+
+export const ROUTES: Routes = [
+  { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
+  { path: '**', redirectTo: 'mail/folder/inbox' }
 ];
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    //StockInventoryModule,
     HttpModule,
     MailModule,
-    RouterModule.forRoot(ROUTER)
+    RouterModule.forRoot(ROUTES)
   ],
   bootstrap: [
     AppComponent
