@@ -1,14 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
+import {RouterModule, Route,Routes, PreloadingStrategy} from '@angular/router';
 import { HttpModule } from '@angular/http';
 
 import { MailModule } from './mail/mail.module';
 
 import { AppComponent } from './app.component';
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/of';
+
+
+export class CustomPreload implements PreloadingStrategy {
+  preload(route: Route, fn: () => Observable<any>): Observable<any> {
+    return route.data && route.data.preload ? fn() : Observable.of(null)
+  }
+}
 
 export const ROUTES: Routes = [
-  { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
+  { path: 'dashboard', data: {preload: CustomPreload}, loadChildren: './dashboard/dashboard.module#DashboardModule' },
   { path: '**', redirectTo: 'mail/folder/inbox' }
 ];
 
@@ -16,11 +25,12 @@ export const ROUTES: Routes = [
   declarations: [
     AppComponent
   ],
+  providers: [CustomPreload],
   imports: [
     BrowserModule,
     HttpModule,
     MailModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES, {preloadingStrategy: CustomPreload})
   ],
   bootstrap: [
     AppComponent
