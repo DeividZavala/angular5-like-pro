@@ -22,7 +22,7 @@ export const ROUTER : Routes = [
   ],
   imports: [
     BrowserModule,
-    StockInventoryModule,
+    //StockInventoryModule,
     HttpModule,
     MailModule,
     RouterModule.forRoot(ROUTER)
