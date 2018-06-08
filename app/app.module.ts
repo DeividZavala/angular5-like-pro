@@ -8,6 +8,8 @@ import { MailModule } from './mail/mail.module';
 import { AppComponent } from './app.component';
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/of';
+import {AuthGuard} from "./auth/auth.guard";
+import {AuthModule} from "./auth/auth.module";
 
 
 export class CustomPreload implements PreloadingStrategy {
@@ -17,7 +19,7 @@ export class CustomPreload implements PreloadingStrategy {
 }
 
 export const ROUTES: Routes = [
-  { path: 'dashboard', data: {preload: CustomPreload}, loadChildren: './dashboard/dashboard.module#DashboardModule' },
+  { path: 'dashboard', canLoad:[AuthGuard], data: {preload: CustomPreload}, loadChildren: './dashboard/dashboard.module#DashboardModule' },
   { path: '**', redirectTo: 'mail/folder/inbox' }
 ];
 
@@ -30,6 +32,7 @@ export const ROUTES: Routes = [
     BrowserModule,
     HttpModule,
     MailModule,
+    AuthModule,
     RouterModule.forRoot(ROUTES, {preloadingStrategy: CustomPreload})
   ],
   bootstrap: [
